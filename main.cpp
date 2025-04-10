@@ -10,6 +10,7 @@
 #include <regex>
 #include <array>
 #include <optional>
+#include <map>
 
 using namespace std;
 
@@ -72,7 +73,7 @@ void copyAndDeleteDuplicate(const string& inputFileName, const string& outputFil
 		string line;
 
 
-		std::unordered_set<pair<string, int>> ticketsCollection;
+		std::unordered_map<pair<string, int>, int> ticketsCollection; // first - ticket, second - freq
 		while (getline(iFile, line)) {
 			std::pair<string, int> parseTicket;
 			try {
@@ -83,12 +84,13 @@ void copyAndDeleteDuplicate(const string& inputFileName, const string& outputFil
 				std::cout << "ignore this ticket\n";
 				continue;
 			}
-			if (ticketsCollection.find(parseTicket) == ticketsCollection.end()) {
-				ticketsCollection.insert(parseTicket);
-				oFile << line << "\n";
-			}
-
+            ticketsCollection[parseTicket]++;
 		}
+        for(const auto& curTicket: ticketsCollection) {
+            if(curTicket.second == 1) {
+                oFile << curTicket.first.first << curTicket.first.second << "\n";
+            }
+        }
 
 	}
 	catch (const std::exception & ex)
