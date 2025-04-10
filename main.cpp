@@ -73,7 +73,7 @@ void copyAndDeleteDuplicate(const string& inputFileName, const string& outputFil
 		string line;
 
 
-		std::unordered_map<pair<string, int>, int> ticketsCollection; // first - ticket, second - freq
+		std::unordered_map<pair<string, int>, std::vector<std::string>> ticketsCollection; // first - ticket, second - freq
 		while (getline(iFile, line)) {
 			std::pair<string, int> parseTicket;
 			try {
@@ -84,11 +84,11 @@ void copyAndDeleteDuplicate(const string& inputFileName, const string& outputFil
 				std::cout << "ignore this ticket\n";
 				continue;
 			}
-            ticketsCollection[parseTicket]++;
+            ticketsCollection[parseTicket].push_back(line);
 		}
         for(const auto& curTicket: ticketsCollection) {
-            if(curTicket.second == 1) {
-                oFile << curTicket.first.first << curTicket.first.second << "\n";
+            if(curTicket.second.size() == 1) {
+                oFile << curTicket.second[0] << "\n";
             }
         }
 
